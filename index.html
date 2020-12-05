@@ -4,25 +4,38 @@
   <script>
 
     (async () => {
+      const memory = new WebAssembly.Memory({ initial: 8, maximum: 8 })
+      const chien = new Uint8Array(memory.buffer, 0, 8)
+      chien[0] = 2
+      chien[1] = 4
+      chien[2] = 5
+      chien[3] = 6
+      chien[4] = 7
+      console.log(chien);
+
+
       const loadAsm = async (scriptSrc) => {
         const script = await (await fetch(scriptSrc)).arrayBuffer()
         const module = await WebAssembly.compile(script)
+
+        const table = new WebAssembly.Table({ initial: 0, element: 'anyfunc' })
         const instance = new WebAssembly.Instance(module, {
           env: {
-            memoryBase: 0,
-            tableBase: 0,
-            memory: new WebAssembly.Memory({ initial: 256, maximum: 1024 }),
-            table: new WebAssembly.Table({ initial: 0, element: 'anyfunc' })
+            // memoryBase: 0,
+            // tableBase: 0,
+            memory,
+            // table
           },
         })
-        console.log(instance);
+        // console.log(memory)
+        // console.log(table);
         return instance.exports
       }
 
       const funcs = await loadAsm("main.wasm")
-      console.log(funcs);
-      const res = funcs.doubler(60)
-      console.log(res);
+      funcs.zouze(chien)
+      console.log(chien);
+      // funcs.init()
 
     })()
 
