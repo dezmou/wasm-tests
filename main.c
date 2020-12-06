@@ -1,22 +1,29 @@
 #include <stdlib.h>
 
-// int *env;
+#define RED 0
+#define GREEN 1
+#define BLUE 2
+#define ALPHA 3
 
-// void init(){
-//   buffer = malloc(sizeof(int) * 64 );
-// }
+#define PIX(x, y) ((unsigned char *)&(data[(y * width + x)]))
 
-void zouze(char* chien){
-  chien[0] = 9;
-  chien[1] = 8;
-  chien[2] = 7;
-  chien[3] = 6;
-  chien[4] = 5;
+// int *image;
+
+void uploadImage(int *data){
+  // image = data;
 }
 
-int doubler(int x)
+
+void processImage(int *data, int width, int height)
 {
-  // int chien = (&x)[5000];
-  (&x)[0] = 454;
-  return (&x)[0];
+  for (int y = 0; y < height; y += 1)
+  {
+    for (int x = 0; x < width; x += 1)
+    {
+      unsigned char *pix = PIX(x, y);
+      pix[RED] = 200;
+      pix[GREEN] = 0;
+      pix[BLUE] = 0;
+    }
+  }
 }

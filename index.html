@@ -4,15 +4,25 @@
   <script>
 
     (async () => {
-      const memory = new WebAssembly.Memory({ initial: 8, maximum: 8 })
-      const chien = new Uint8Array(memory.buffer, 0, 8)
-      chien[0] = 2
-      chien[1] = 4
-      chien[2] = 5
-      chien[3] = 6
-      chien[4] = 7
-      console.log(chien);
+      const img = await new Promise(resolve => {
+        const img = new Image()
+        img.src = "./image.png"
+        img.onload = () => {
+          resolve(img)
+        }
+      })
+      const canvas = document.createElement("canvas")
+      document.body.appendChild(canvas)
+      canvas.width = img.width
+      canvas.height = img.height
+      const ctx = canvas.getContext("2d")
+      ctx.drawImage(img, 0, 0)
+      const pixels = ctx.getImageData(0, 0, img.width, img.height)
 
+      const memory = new WebAssembly.Memory({ initial: 800, maximum: 8000 })
+      console.log(memory);
+      const chien = new Uint8Array(memory.buffer, 0, img.width * img.height * 4)
+      chien.set(pixels.data, 0)
 
       const loadAsm = async (scriptSrc) => {
         const script = await (await fetch(scriptSrc)).arrayBuffer()
@@ -21,22 +31,22 @@
         const table = new WebAssembly.Table({ initial: 0, element: 'anyfunc' })
         const instance = new WebAssembly.Instance(module, {
           env: {
-            // memoryBase: 0,
-            // tableBase: 0,
             memory,
-            // table
           },
         })
-        // console.log(memory)
-        // console.log(table);
         return instance.exports
       }
 
       const funcs = await loadAsm("main.wasm")
-      funcs.zouze(chien)
-      console.log(chien);
-      // funcs.init()
 
+      while (true) {
+        const time = performance.now();
+        funcs.processImage(0, img.width, img.height)
+        console.log(performance.now() - time);
+        const dat = new ImageData(new Uint8ClampedArray(chien), img.width, img.height)
+        ctx.putImageData(dat, 0, 0)
+        await new Promise(r => requestAnimationFrame(r))
+      }
     })()
 
   </script>
