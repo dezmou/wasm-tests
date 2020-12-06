@@ -21,7 +21,7 @@ void processImage(int *data, int width, int height, int amount)
     for (int x = 0; x < width; x += 1)
     {
       unsigned char *pix = PIX(x, y);
-      pix[RED] = (unsigned char *)amount;
+      pix[RED] = (unsigned char)amount;
       pix[GREEN] = 0;
       pix[BLUE] = 0;
     }
