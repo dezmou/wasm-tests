@@ -1,0 +1,38 @@
+: 1607160990:0;sudo apt install emcc
+: 1607161229:0;mv em.tar.gz emcc
+: 1607161506:0;emcc hello.c -s WASM=1 -o hello.html
+: 1607161823:0;mkdir emcc
+: 1607161826:0;cd emcc
+: 1607161852:0;rm -rf emcc
+: 1607162173:0;emcc main.c -s WASM=1 -o hello.html
+: 1607163014:0;emcc main.c -s WASM=1
+: 1607163719:0;emcc hello_world.c -Os -s WASM=1 -s SIDE_MODULE=1 -o hello_world.wasm
+: 1607163727:0;emcc main.c -Os -s WASM=1 -s SIDE_MODULE=1 -o hello_world.wasm
+: 1607189698:0;emcc
+: 1607366665:0;emcc main.c -Os -s WASM=1 -s SIDE_MODULE=1 -o main.wasm
+: 1607423394:0;emcc main.c -Os -s -s SIDE_MODULE=1 -o test.js && cp main.wasm ../public
+: 1607423814:0;./emcc --clear-cache
+: 1607423818:0;emcc --clear-cache
+: 1607423858:0;emcc --clear-cache --force
+: 1607423889:0;emcc --clear-cache -s WASM_OBJECT_FILES=1
+: 1607424136:0;emcc main.c -O0 -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607430376:0;emcc main.c -Os -s WASM=1 -s  -o main.wasm && cp main.wasm ../public
+: 1607430443:0;emcc main.c -Os -s WASM=1 -s -s ERROR_ON_UNDEFINED_SYMBOLS=0  -o main.wasm && cp main.wasm ../public
+: 1607432410:0;emcc main.c -Oz -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607432496:0;emcc main.c -O1 -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607432500:0;emcc main.c -O2 -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607432503:0;emcc main.c -O3 -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607432794:0;emcc main.c -Os -flto -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607432932:0;emcc main.c -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1607433305:0;emcc main.c
+: 1607434206:0;emcc main.c -o test.html
+: 1607435014:0;emcc main.c -o test.html EXPORTED_FUNCTIONS='["processImage"]' -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]'
+: 1607435034:0;emcc main.c -o test.html -s EXPORTED_FUNCTIONS='["processImage"]' -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]'
+: 1607435052:0;emcc main.c -o test.html -s EXPORTED_FUNCTIONS='["_processImage"]' -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]'
+: 1607464408:0;emcc main.c -Os -s WASM=1 -s SIDE_MODULE=1 -o main.wasm && cp main.wasm ../public
+: 1620418756:0;emcc main.c -s WASM=1 -o hello.html
+: 1620419157:0;emcc main.c -s WASM=1 -o hello.html
+: 1620421172:0;emcc main.c -s WASM=1 -o hello.html
+: 1620421266:0;emcc main.c -s WASM=1 -o main.wasm
+: 1620421292:0;emcc main.c -s WASM=1 -s SIDE_MODULE=1 -o main.was
+: 1620421440:0;hh | grep emcc > history

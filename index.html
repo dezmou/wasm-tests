@@ -23,7 +23,6 @@
       console.log(memory);
       const chien = new Uint8Array(memory.buffer, 0, img.width * img.height * 4)
       chien.set(pixels.data, 0)
-
       const loadAsm = async (scriptSrc) => {
         const script = await (await fetch(scriptSrc)).arrayBuffer()
         const module = await WebAssembly.compile(script)
@@ -51,7 +50,7 @@
         ctx.putImageData(dat, 0, 0)
         const timePutImageData = performance.now() - time
         await new Promise(r => requestAnimationFrame(r))
-        amount += amount >= 250 ? -250 : 1;
+        amount += amount >= 250 ? -250 : 4;
       }
     })()
 
