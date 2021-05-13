@@ -1,9 +1,12 @@
 <html>
 
 <body>
-  <script>
+  <div id="fps">
 
+  </div>
+  <script>
     (async () => {
+      // Get Image
       const img = await new Promise(resolve => {
         const img = new Image()
         img.src = "./image.png"
@@ -16,19 +19,22 @@
       canvas.width = img.width
       canvas.height = img.height
       const ctx = canvas.getContext("2d")
+      let time = performance.now()
       ctx.drawImage(img, 0, 0)
       const pixels = ctx.getImageData(0, 0, img.width, img.height)
-      console.log(img.width * img.width * 4 * 0.001);
+      const timeElapsed = performance.now() - time
+      console.log(timeElapsed);
+
+      // Set memory
       const memory = new WebAssembly.Memory({ initial: img.width * img.width * 4 / 64000 })
-      console.log(memory);
-      // const chien = new Uint8Array(memory.buffer, 0, img.width * img.height * 4)
       const chien = new Uint8ClampedArray(memory.buffer, 0, img.width * img.height * 4)
+      const dat = new ImageData(chien, img.width, img.height)
       chien.set(pixels.data, 0)
+
+      // Load asm
       const loadAsm = async (scriptSrc) => {
         const script = await (await fetch(scriptSrc)).arrayBuffer()
         const module = await WebAssembly.compile(script)
-
-        const table = new WebAssembly.Table({ initial: 0, element: 'anyfunc' })
         const instance = new WebAssembly.Instance(module, {
           env: {
             memory,
@@ -36,22 +42,22 @@
         })
         return instance.exports
       }
-
       const funcs = await loadAsm("main.wasm")
 
+      // mainloop
       let amount = 0;
       let loopIndex = 0;
-      // const dat = new ImageData(new Uint8ClampedArray(chien), img.width, img.height)
       while (true) {
         loopIndex += 1;
+
         let time = performance.now()
         funcs.processImage(0, img.width, img.height, amount)
-        // const clamped = new Uint8ClampedArray(chien);
-        const dat = new ImageData(chien, img.width, img.height)
-        ctx.putImageData(dat, 0, 0)
+        ctx.putImageData(dat, 0, 0);
         const timeElapsed = performance.now() - time
+
         if (loopIndex % 10 === 0) {
-          console.log(timeElapsed);
+          document.querySelector("#fps").textContent = `${timeElapsed}`;
+          // console.log(timeElapsed);
         }
         await new Promise(r => requestAnimationFrame(r))
         amount += amount >= 250 ? -250 : 4;
